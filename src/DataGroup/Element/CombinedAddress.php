@@ -1,4 +1,4 @@
-<?php declare(strict_types=1);
+<?php
 
 namespace Sprain\SwissQrBill\DataGroup\Element;
 
@@ -48,11 +48,11 @@ class CombinedAddress implements AddressInterface, SelfValidatableInterface, QrC
     private $country;
 
     public static function create(
-        string $name,
-        ?string $addressLine1,
-        string $addressLine2,
-        string $country
-    ): self {
+        $name,
+        $addressLine1,
+        $addressLine2,
+        $country
+    ) {
         $combinedAddress = new self();
         $combinedAddress->name = $name;
         $combinedAddress->addressLine1 = $addressLine1;
@@ -62,27 +62,27 @@ class CombinedAddress implements AddressInterface, SelfValidatableInterface, QrC
         return $combinedAddress;
     }
 
-    public function getName(): ?string
+    public function getName()
     {
         return $this->name;
     }
 
-    public function getAddressLine1(): ?string
+    public function getAddressLine1()
     {
         return $this->addressLine1;
     }
 
-    public function getAddressLine2(): ?string
+    public function getAddressLine2()
     {
         return $this->addressLine2;
     }
 
-    public function getCountry(): ?string
+    public function getCountry()
     {
         return $this->country;
     }
 
-    public function getFullAddress(): string
+    public function getFullAddress()
     {
         $address = $this->getName();
 
@@ -99,7 +99,7 @@ class CombinedAddress implements AddressInterface, SelfValidatableInterface, QrC
         return $address;
     }
 
-    public function getQrCodeData(): array
+    public function getQrCodeData()
     {
         return [
             $this->getAddressLine2() ? self::ADDRESS_TYPE : '',
@@ -112,31 +112,24 @@ class CombinedAddress implements AddressInterface, SelfValidatableInterface, QrC
         ];
     }
 
-    public static function loadValidatorMetadata(ClassMetadata $metadata): void
+    public static function loadValidatorMetadata(ClassMetadata $metadata)
     {
-        $metadata->addPropertyConstraints('name', [
-            new Assert\NotBlank(),
-            new Assert\Length([
-                'max' => 70
-            ])
-        ]);
+        $metadata->addPropertyConstraint('name', new Assert\NotBlank());
+        $metadata->addPropertyConstraint('name', new Assert\Length([
+            'max' => 70
+        ]));
 
-        $metadata->addPropertyConstraints('addressLine1', [
-            new Assert\Length([
-                'max' => 70
-            ])
-        ]);
 
-        $metadata->addPropertyConstraints('addressLine2', [
-            new Assert\NotBlank(),
-            new Assert\Length([
-                'max' => 70
-            ])
-        ]);
+        $metadata->addPropertyConstraint('addressLine1', new Assert\Length([
+            'max' => 70
+        ]));
 
-        $metadata->addPropertyConstraints('country', [
-            new Assert\NotBlank(),
-            new Assert\Country()
-        ]);
+        $metadata->addPropertyConstraint('addressLine2', new Assert\NotBlank());
+        $metadata->addPropertyConstraint('addressLine2', new Assert\Length([
+            'max' => 70
+        ]));
+
+        $metadata->addPropertyConstraint('country', new Assert\NotBlank());
+        $metadata->addPropertyConstraint('country', new Assert\Country());
     }
 }

@@ -1,12 +1,12 @@
-<?php declare(strict_types=1);
+<?php
 
 namespace Sprain\SwissQrBill\DataGroup;
 
 interface AddressInterface
 {
-    public function getName(): ?string;
+    public function getName();
 
-    public function getCountry(): ?string;
+    public function getCountry();
 
-    public function getFullAddress(): string;
+    public function getFullAddress();
 }

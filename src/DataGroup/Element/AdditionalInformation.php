@@ -1,4 +1,4 @@
-<?php declare(strict_types=1);
+<?php
 
 namespace Sprain\SwissQrBill\DataGroup\Element;
 
@@ -31,9 +31,9 @@ class AdditionalInformation implements QrCodeableInterface, SelfValidatableInter
     private $billInformation;
 
     public static function create(
-        ?string $message,
-        ?string $billInformation = null
-    ): self {
+        $message,
+        $billInformation = null
+    ) {
         $additionalInformation = new self();
         $additionalInformation->message = $message;
         $additionalInformation->billInformation = $billInformation;
@@ -41,17 +41,17 @@ class AdditionalInformation implements QrCodeableInterface, SelfValidatableInter
         return $additionalInformation;
     }
 
-    public function getMessage(): ?string
+    public function getMessage()
     {
         return $this->message;
     }
 
-    public function getBillInformation(): ?string
+    public function getBillInformation()
     {
         return $this->billInformation;
     }
 
-    public function getFormattedString(): ?string
+    public function getFormattedString()
     {
         $string = $this->getMessage();
         if ($this->getBillInformation()) {
@@ -61,7 +61,7 @@ class AdditionalInformation implements QrCodeableInterface, SelfValidatableInter
         return $string;
     }
 
-    public function getQrCodeData(): array
+    public function getQrCodeData()
     {
         return [
             $this->getMessage(),
@@ -70,18 +70,14 @@ class AdditionalInformation implements QrCodeableInterface, SelfValidatableInter
         ];
     }
 
-    public static function loadValidatorMetadata(ClassMetadata $metadata): void
+    public static function loadValidatorMetadata(ClassMetadata $metadata)
     {
-        $metadata->addPropertyConstraints('message', [
-            new Assert\Length([
-                'max' => 140
-            ])
-        ]);
+        $metadata->addPropertyConstraint('message', new Assert\Length([
+            'max' => 140
+        ]));
 
-        $metadata->addPropertyConstraints('billInformation', [
-            new Assert\Length([
-                'max' => 140
-            ])
-        ]);
+        $metadata->addPropertyConstraint('billInformation', new Assert\Length([
+            'max' => 140
+        ]));
     }
 }

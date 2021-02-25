@@ -1,4 +1,4 @@
-<?php declare(strict_types=1);
+<?php
 
 namespace Sprain\SwissQrBill\Constraint;
 
@@ -10,7 +10,7 @@ use Symfony\Component\Validator\Exception\UnexpectedTypeException;
 
 class ValidCreditorInformationPaymentReferenceCombinationValidator extends ConstraintValidator
 {
-    private const QR_IBAN_IS_ALLOWED = [
+    const QR_IBAN_IS_ALLOWED = [
         PaymentReference::TYPE_QR   => true,
         PaymentReference::TYPE_SCOR => false,
         PaymentReference::TYPE_NON  => false,

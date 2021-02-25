@@ -1,8 +1,8 @@
-<?php declare(strict_types=1);
+<?php
 
 namespace Sprain\SwissQrBill\DataGroup;
 
 interface QrCodeableInterface
 {
-    public function getQrCodeData(): array;
+    public function getQrCodeData();
 }

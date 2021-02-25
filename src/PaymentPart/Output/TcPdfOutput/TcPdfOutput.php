@@ -1,4 +1,4 @@
-<?php declare(strict_types=1);
+<?php
 
 namespace Sprain\SwissQrBill\PaymentPart\Output\TcPdfOutput;
 
@@ -78,7 +78,7 @@ final class TcPdfOutput extends AbstractOutput implements OutputInterface
         $this->setQrCodeImageFormat(QrCode::FILE_FORMAT_SVG);
     }
 
-    public function getPaymentPart(): void
+    public function getPaymentPart()
     {
         $retainCellHeightRatio = $this->tcPdf->getCellHeightRatio();
 
@@ -99,7 +99,7 @@ final class TcPdfOutput extends AbstractOutput implements OutputInterface
         $this->tcPdf->setCellHeightRatio($retainCellHeightRatio);
     }
 
-    private function addSwissQrCodeImage(): void
+    private function addSwissQrCodeImage()
     {
         $qrCode = $this->getQrCode();
 
@@ -122,7 +122,7 @@ final class TcPdfOutput extends AbstractOutput implements OutputInterface
         $this->tcPdf->$method("@".$img, $xPosQrCode, $yPosQrCode, 46, 46);
     }
 
-    private function addInformationContentReceipt(): void
+    private function addInformationContentReceipt()
     {
         $x = self::LEFT_PART_X;
         $this->tcPdf->setCellHeightRatio(self::LEFT_CELL_HEIGHT_RATIO_COMMON);
@@ -147,7 +147,7 @@ final class TcPdfOutput extends AbstractOutput implements OutputInterface
         $this->printCell(Translation::get('acceptancePoint', $this->language), 54, 0, self::ALIGN_BELOW, self::ALIGN_RIGHT);
     }
 
-    private function addInformationContent(): void
+    private function addInformationContent()
     {
         $x = self::RIGHT_PART_X_INFO;
         $this->tcPdf->setCellHeightRatio(self::RIGHT_CELL_HEIGHT_RATIO_COMMON);
@@ -166,7 +166,7 @@ final class TcPdfOutput extends AbstractOutput implements OutputInterface
         }
     }
 
-    private function addCurrencyContentReceipt(): void
+    private function addCurrencyContentReceipt()
     {
         $x = self::LEFT_PART_X;
         $this->tcPdf->setCellHeightRatio(self::LEFT_CELL_HEIGHT_RATIO_CURRENCY_AMOUNT);
@@ -178,7 +178,7 @@ final class TcPdfOutput extends AbstractOutput implements OutputInterface
         }
     }
 
-    private function addAmountContentReceipt(): void
+    private function addAmountContentReceipt()
     {
         $x = 16;
         $this->tcPdf->setCellHeightRatio(self::LEFT_CELL_HEIGHT_RATIO_CURRENCY_AMOUNT);
@@ -190,7 +190,7 @@ final class TcPdfOutput extends AbstractOutput implements OutputInterface
         }
     }
 
-    private function addCurrencyContent(): void
+    private function addCurrencyContent()
     {
         $x = self::RIGHT_PART_X;
         $this->tcPdf->setCellHeightRatio(self::RIGHT_CELL_HEIGHT_RATIO_CURRENCY_AMOUNT);
@@ -202,7 +202,7 @@ final class TcPdfOutput extends AbstractOutput implements OutputInterface
         }
     }
 
-    private function addAmountContent(): void
+    private function addAmountContent()
     {
         $x = 80;
         $this->tcPdf->setCellHeightRatio(self::RIGHT_CELL_HEIGHT_RATIO_CURRENCY_AMOUNT);
@@ -214,7 +214,7 @@ final class TcPdfOutput extends AbstractOutput implements OutputInterface
         }
     }
 
-    private function addFurtherInformationContent(): void
+    private function addFurtherInformationContent()
     {
         $x = self::RIGHT_PART_X;
         $this->tcPdf->setCellHeightRatio(self::RIGHT_CELL_HEIGHT_RATIO_COMMON);
@@ -227,7 +227,7 @@ final class TcPdfOutput extends AbstractOutput implements OutputInterface
         }
     }
 
-    private function addSeparatorContentIfNotPrintable(): void
+    private function addSeparatorContentIfNotPrintable()
     {
         if (!$this->isPrintable()) {
             $this->tcPdf->SetLineStyle(['width' => 0.1, 'color' => [0, 0, 0]]);
@@ -240,7 +240,7 @@ final class TcPdfOutput extends AbstractOutput implements OutputInterface
         }
     }
 
-    private function setContentElement(OutputElementInterface $element, bool $isReceiptPart): void
+    private function setContentElement(OutputElementInterface $element, bool $isReceiptPart)
     {
         if ($element instanceof Title) {
             $this->setTitleElement($element, $isReceiptPart);
@@ -255,7 +255,7 @@ final class TcPdfOutput extends AbstractOutput implements OutputInterface
         }
     }
 
-    private function setTitleElement(Title $element, bool $isReceiptPart): void
+    private function setTitleElement(Title $element, bool $isReceiptPart)
     {
         $this->tcPdf->SetFont(
             self::FONT,
@@ -270,7 +270,7 @@ final class TcPdfOutput extends AbstractOutput implements OutputInterface
         );
     }
 
-    private function setTextElement(Text $element, bool $isReceiptPart): void
+    private function setTextElement(Text $element, bool $isReceiptPart)
     {
         $this->tcPdf->SetFont(
             self::FONT,
@@ -288,7 +288,7 @@ final class TcPdfOutput extends AbstractOutput implements OutputInterface
         $this->tcPdf->Ln($isReceiptPart ? self::LINE_SPACING_RECEIPT : self::LINE_SPACING_PAYMENT_PART);
     }
 
-    private function setPlaceholderElement(Placeholder $element): void
+    private function setPlaceholderElement(Placeholder $element)
     {
         $type = $element->getType();
 

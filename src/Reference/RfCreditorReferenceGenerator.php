@@ -1,4 +1,4 @@
-<?php declare(strict_types=1);
+<?php
 
 namespace Sprain\SwissQrBill\Reference;
 
@@ -42,7 +42,7 @@ class RfCreditorReferenceGenerator implements SelfValidatableInterface
         return $generator->generateRfReference($this->reference, false);
     }
 
-    public static function loadValidatorMetadata(ClassMetadata $metadata): void
+    public static function loadValidatorMetadata(ClassMetadata $metadata)
     {
         $metadata->addPropertyConstraints('reference', [
             new Assert\Regex([

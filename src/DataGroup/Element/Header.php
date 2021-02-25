@@ -1,4 +1,4 @@
-<?php declare(strict_types=1);
+<?php
 
 namespace Sprain\SwissQrBill\DataGroup\Element;
 
@@ -40,7 +40,7 @@ class Header implements QrCodeableInterface, SelfValidatableInterface
      */
     private $coding;
 
-    public static function create(string $qrType, string $version, int $coding): self
+    public static function create($qrType, $version, $coding)
     {
         $header = new self();
         $header->coding = $coding;
@@ -50,22 +50,22 @@ class Header implements QrCodeableInterface, SelfValidatableInterface
         return $header;
     }
 
-    public function getQrType(): ?string
+    public function getQrType()
     {
         return $this->qrType;
     }
 
-    public function getVersion(): ?string
+    public function getVersion()
     {
         return $this->version;
     }
 
-    public function getCoding(): ?int
+    public function getCoding()
     {
         return $this->coding;
     }
 
-    public function getQrCodeData(): array
+    public function getQrCodeData()
     {
         return [
             $this->getQrType(),
@@ -74,33 +74,28 @@ class Header implements QrCodeableInterface, SelfValidatableInterface
         ];
     }
 
-    public static function loadValidatorMetadata(ClassMetadata $metadata): void
+    public static function loadValidatorMetadata(ClassMetadata $metadata)
     {
         // Fixed length, three-digit, alphanumeric
-        $metadata->addPropertyConstraints('qrType', [
-            new Assert\NotBlank(),
-            new Assert\Regex([
-                'pattern' => '/^[a-zA-Z0-9]{3}$/',
-                'match' => true
-            ])
-        ]);
+        $metadata->addPropertyConstraint('qrType', new Assert\NotBlank());
+        $metadata->addPropertyConstraint('qrType', new Assert\Regex([
+            'pattern' => '/^[a-zA-Z0-9]{3}$/',
+            'match' => true
+        ]));
 
         // Fixed length, four-digit, numeric
-        $metadata->addPropertyConstraints('version', [
-            new Assert\NotBlank(),
-            new Assert\Regex([
-                'pattern' => '/^\d{4}$/',
-                'match' => true
-            ])
-        ]);
+        $metadata->addPropertyConstraint('version', new Assert\NotBlank());
+        $metadata->addPropertyConstraint('version', new Assert\Regex([
+            'pattern' => '/^\d{4}$/',
+            'match' => true
+        ]));
+
 
         // One-digit, numeric
-        $metadata->addPropertyConstraints('coding', [
-            new Assert\NotBlank(),
-            new Assert\Regex([
-                'pattern' => '/^\d{1}$/',
-                'match' => true
-            ])
-        ]);
+        $metadata->addPropertyConstraint('coding', new Assert\NotBlank());
+        $metadata->addPropertyConstraint('coding', new Assert\Regex([
+            'pattern' => '/^\d{1}$/',
+            'match' => true
+        ]));
     }
 }

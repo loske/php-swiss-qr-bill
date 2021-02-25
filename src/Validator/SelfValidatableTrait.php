@@ -1,4 +1,4 @@
-<?php declare(strict_types=1);
+<?php
 
 namespace Sprain\SwissQrBill\Validator;
 
@@ -11,7 +11,7 @@ trait SelfValidatableTrait
     /** @var ValidatorInterface */
     private $validator;
 
-    public function getViolations(): ConstraintViolationListInterface
+    public function getViolations()
     {
         if (null == $this->validator) {
             $this->validator = Validation::createValidatorBuilder()
@@ -22,7 +22,7 @@ trait SelfValidatableTrait
         return $this->validator->validate($this);
     }
 
-    public function isValid(): bool
+    public function isValid()
     {
         if (0 == $this->getViolations()->count()) {
             return true;

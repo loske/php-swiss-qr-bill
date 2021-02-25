@@ -1,4 +1,4 @@
-<?php declare(strict_types=1);
+<?php
 
 namespace Sprain\SwissQrBill;
 
@@ -29,10 +29,10 @@ class QrBill implements SelfValidatableInterface
     const ERROR_CORRECTION_LEVEL_MEDIUM = ErrorCorrectionLevel::MEDIUM;
     const ERROR_CORRECTION_LEVEL_LOW = ErrorCorrectionLevel::LOW;
 
-    private const SWISS_CROSS_LOGO_FILE = __DIR__ . '/../assets/swiss-cross.optimized.png';
+    const SWISS_CROSS_LOGO_FILE = __DIR__ . '/../assets/swiss-cross.optimized.png';
 
-    private const PX_QR_CODE = 543;    // recommended 46x46 mm in px @ 300dpi – in pixel based outputs, the final image size may be slightly different, depending on the qr code contents
-    private const PX_SWISS_CROSS = 83; // recommended 7x7 mm in px @ 300dpi
+    const PX_QR_CODE = 543;    // recommended 46x46 mm in px @ 300dpi – in pixel based outputs, the final image size may be slightly different, depending on the qr code contents
+    const PX_SWISS_CROSS = 83; // recommended 7x7 mm in px @ 300dpi
 
     /** @var Header */
     private $header;
@@ -61,7 +61,7 @@ class QrBill implements SelfValidatableInterface
     /** @var string  */
     private $errorCorrectionLevel = self::ERROR_CORRECTION_LEVEL_MEDIUM;
 
-    public static function create(): self
+    public static function create()
     {
         $header = Header::create(
             Header::QRTYPE_SPC,
@@ -75,103 +75,103 @@ class QrBill implements SelfValidatableInterface
         return $qrBill;
     }
 
-    public function getHeader(): ?Header
+    public function getHeader()
     {
         return $this->header;
     }
 
-    public function setHeader(Header $header): self
+    public function setHeader(Header $header)
     {
         $this->header = $header;
 
         return $this;
     }
 
-    public function getCreditorInformation(): ?CreditorInformation
+    public function getCreditorInformation()
     {
         return $this->creditorInformation;
     }
 
-    public function setCreditorInformation(CreditorInformation $creditorInformation): self
+    public function setCreditorInformation(CreditorInformation $creditorInformation)
     {
         $this->creditorInformation = $creditorInformation;
 
         return $this;
     }
 
-    public function getCreditor(): ?AddressInterface
+    public function getCreditor()
     {
         return $this->creditor;
     }
 
-    public function setCreditor(AddressInterface $creditor): self
+    public function setCreditor(AddressInterface $creditor)
     {
         $this->creditor = $creditor;
         
         return $this;
     }
 
-    public function getPaymentAmountInformation(): ?PaymentAmountInformation
+    public function getPaymentAmountInformation()
     {
         return $this->paymentAmountInformation;
     }
 
-    public function setPaymentAmountInformation(PaymentAmountInformation $paymentAmountInformation): self
+    public function setPaymentAmountInformation(PaymentAmountInformation $paymentAmountInformation)
     {
         $this->paymentAmountInformation = $paymentAmountInformation;
         
         return $this;
     }
 
-    public function getUltimateDebtor(): ?AddressInterface
+    public function getUltimateDebtor()
     {
         return $this->ultimateDebtor;
     }
 
-    public function setUltimateDebtor(AddressInterface $ultimateDebtor): self
+    public function setUltimateDebtor(AddressInterface $ultimateDebtor)
     {
         $this->ultimateDebtor = $ultimateDebtor;
         
         return $this;
     }
 
-    public function getPaymentReference(): ?PaymentReference
+    public function getPaymentReference()
     {
         return $this->paymentReference;
     }
 
-    public function setPaymentReference(PaymentReference $paymentReference): self
+    public function setPaymentReference(PaymentReference $paymentReference)
     {
         $this->paymentReference = $paymentReference;
         
         return $this;
     }
 
-    public function getAdditionalInformation(): ?AdditionalInformation
+    public function getAdditionalInformation()
     {
         return $this->additionalInformation;
     }
 
-    public function setAdditionalInformation(AdditionalInformation $additionalInformation): self
+    public function setAdditionalInformation(AdditionalInformation $additionalInformation)
     {
         $this->additionalInformation = $additionalInformation;
 
         return $this;
     }
 
-    public function getAlternativeSchemes(): array
+    public function getAlternativeSchemes()
     {
         return $this->alternativeSchemes;
     }
 
-    public function setAlternativeSchemes(array $alternativeSchemes): self
+    public function setAlternativeSchemes(array $alternativeSchemes)
     {
         $this->alternativeSchemes = $alternativeSchemes;
 
         return $this;
     }
 
-    public function addAlternativeScheme(AlternativeScheme $alternativeScheme): self
+    public function addAlternativeScheme(AlternativeScheme $alternativeScheme)
     {
         $this->alternativeSchemes[] = $alternativeScheme;
 
@@ -181,14 +181,14 @@ class QrBill implements SelfValidatableInterface
     /**
      * @deprecated Will be removed in v3. The specs require the error correction level to be fixed at medium.
      */
-    public function setErrorCorrectionLevel(string $errorCorrectionLevel): self
+    public function setErrorCorrectionLevel(string $errorCorrectionLevel)
     {
         $this->errorCorrectionLevel = $errorCorrectionLevel;
 
         return $this;
     }
 
-    public function getQrCode(): QrCode
+    public function getQrCode()
     {
         if (!$this->isValid()) {
             throw new InvalidQrBillDataException(
@@ -199,17 +199,17 @@ class QrBill implements SelfValidatableInterface
         $qrCode = new QrCode();
         $qrCode->setText($this->getQrCodeContent());
         $qrCode->setSize(self::PX_QR_CODE);
-        $qrCode->setLogoHeight(self::PX_SWISS_CROSS);
+//        $qrCode->setLogoHeight(self::PX_SWISS_CROSS);
         $qrCode->setLogoWidth(self::PX_SWISS_CROSS);
         $qrCode->setLogoPath(self::SWISS_CROSS_LOGO_FILE);
-        $qrCode->setRoundBlockSize(true, \Endroid\QrCode\QrCode::ROUND_BLOCK_SIZE_MODE_ENLARGE);
+//        $qrCode->setRoundBlockSize(true, \Endroid\QrCode\QrCode::ROUND_BLOCK_SIZE_MODE_ENLARGE);
         $qrCode->setMargin(0);
         $qrCode->setErrorCorrectionLevel(new ErrorCorrectionLevel($this->errorCorrectionLevel));
 
         return $qrCode;
     }
 
-    private function getQrCodeContent(): string
+    private function getQrCodeContent()
     {
         $elements = [
             $this->getHeader(),
@@ -228,7 +228,7 @@ class QrBill implements SelfValidatableInterface
         return implode("\n", $qrCodeStringElements);
     }
 
-    private function extractQrCodeDataFromElements(array $elements): array
+    private function extractQrCodeDataFromElements(array $elements)
     {
         $qrCodeElements = [];
 
@@ -251,48 +251,34 @@ class QrBill implements SelfValidatableInterface
         return $qrCodeElements;
     }
 
-    public static function loadValidatorMetadata(ClassMetadata $metadata): void
+    public static function loadValidatorMetadata(ClassMetadata $metadata)
     {
         $metadata->addConstraint(
             new ValidCreditorInformationPaymentReferenceCombination()
         );
 
-        $metadata->addPropertyConstraints('header', [
-            new Assert\NotNull(),
-            new Assert\Valid()
-        ]);
+        $metadata->addPropertyConstraint('header', new Assert\NotNull());
+        $metadata->addPropertyConstraint('header', new Assert\Valid());
 
-        $metadata->addPropertyConstraints('creditorInformation', [
-            new Assert\NotNull(),
-            new Assert\Valid()
-        ]);
+        $metadata->addPropertyConstraint('creditorInformation', new Assert\NotNull());
+        $metadata->addPropertyConstraint('creditorInformation', new Assert\Valid());
 
-        $metadata->addPropertyConstraints('creditor', [
-            new Assert\NotNull(),
-            new Assert\Valid()
-        ]);
+        $metadata->addPropertyConstraint('creditor', new Assert\NotNull());
+        $metadata->addPropertyConstraint('creditor', new Assert\Valid());
 
-        $metadata->addPropertyConstraints('paymentAmountInformation', [
-            new Assert\NotNull(),
-            new Assert\Valid()
-        ]);
+        $metadata->addPropertyConstraint('paymentAmountInformation', new Assert\NotNull());
+        $metadata->addPropertyConstraint('paymentAmountInformation', new Assert\Valid());
 
-        $metadata->addPropertyConstraints('ultimateDebtor', [
-            new Assert\Valid()
-        ]);
+        $metadata->addPropertyConstraint('ultimateDebtor', new Assert\Valid());
 
-        $metadata->addPropertyConstraints('paymentReference', [
-            new Assert\NotNull(),
-            new Assert\Valid()
-        ]);
+        $metadata->addPropertyConstraint('paymentReference', new Assert\NotNull());
+        $metadata->addPropertyConstraint('paymentReference', new Assert\Valid());
 
-        $metadata->addPropertyConstraints('alternativeSchemes', [
-            new Assert\Count([
-                'max' => 2
-            ]),
-            new Assert\Valid([
-                'traverse' => true
-            ])
-        ]);
+        $metadata->addPropertyConstraint('alternativeSchemes', new Assert\Count([
+            'max' => 2
+        ]));
+        $metadata->addPropertyConstraint('alternativeSchemes', new Assert\Valid([
+            'traverse' => true
+        ]));
     }
 }

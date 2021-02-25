@@ -1,4 +1,4 @@
-<?php declare(strict_types=1);
+<?php
 
 namespace Sprain\SwissQrBill\PaymentPart\Output;
 
@@ -36,36 +36,36 @@ abstract class AbstractOutput
         return $this->qrBill;
     }
 
-    public function getLanguage(): ?string
+    public function getLanguage()
     {
         return $this->language;
     }
 
-    public function setPrintable(bool $printable): self
+    public function setPrintable(bool $printable)
     {
         $this->printable = $printable;
 
         return $this;
     }
 
-    public function isPrintable(): bool
+    public function isPrintable()
     {
         return $this->printable;
     }
 
-    public function setQrCodeImageFormat(string $fileExtension): self
+    public function setQrCodeImageFormat(string $fileExtension)
     {
         $this->qrCodeImageFormat = $fileExtension;
 
         return $this;
     }
 
-    public function getQrCodeImageFormat(): string
+    public function getQrCodeImageFormat()
     {
         return $this->qrCodeImageFormat;
     }
 
-    protected function getInformationElements(): array
+    protected function getInformationElements()
     {
         $informationElements = [];
 
@@ -93,7 +93,7 @@ abstract class AbstractOutput
         return $informationElements;
     }
 
-    protected function getInformationElementsOfReceipt(): array
+    protected function getInformationElementsOfReceipt()
     {
         $informationElements = [];
 
@@ -116,7 +116,7 @@ abstract class AbstractOutput
         return $informationElements;
     }
 
-    protected function getCurrencyElements(): array
+    protected function getCurrencyElements()
     {
         $currencyElements = [];
 
@@ -126,7 +126,7 @@ abstract class AbstractOutput
         return $currencyElements;
     }
 
-    protected function getAmountElements(): array
+    protected function getAmountElements()
     {
         $amountElements = [];
 
@@ -141,7 +141,7 @@ abstract class AbstractOutput
         return $amountElements;
     }
 
-    protected function getAmountElementsReceipt(): array
+    protected function getAmountElementsReceipt()
     {
         $amountElements = [];
 
@@ -156,7 +156,7 @@ abstract class AbstractOutput
         return $amountElements;
     }
 
-    protected function getFurtherInformationElements(): array
+    protected function getFurtherInformationElements()
     {
         $furtherInformationElements = [];
 
@@ -169,7 +169,7 @@ abstract class AbstractOutput
         return $furtherInformationElements;
     }
 
-    protected function getQrCode(): QrCode
+    protected function getQrCode()
     {
         $qrCode = $this->qrBill->getQrCode();
         $qrCode->setWriterByExtension($this->getQrCodeImageFormat());

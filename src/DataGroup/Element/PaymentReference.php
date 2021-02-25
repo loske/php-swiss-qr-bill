@@ -1,4 +1,4 @@
-<?php declare(strict_types=1);
+<?php
 
 namespace Sprain\SwissQrBill\DataGroup\Element;
 
@@ -34,7 +34,7 @@ class PaymentReference implements GroupSequenceProviderInterface, QrCodeableInte
      */
     private $reference;
 
-    public static function create(string $type, ?string $reference = null): self
+    public static function create($type, $reference = null)
     {
         $paymentReference = new self();
         $paymentReference->type = $type;
@@ -51,17 +51,17 @@ class PaymentReference implements GroupSequenceProviderInterface, QrCodeableInte
         return $paymentReference;
     }
 
-    public function getType(): ?string
+    public function getType()
     {
         return $this->type;
     }
 
-    public function getReference(): ?string
+    public function getReference()
     {
         return $this->reference;
     }
 
-    public function getFormattedReference(): ?string
+    public function getFormattedReference()
     {
         switch ($this->type) {
             case self::TYPE_QR:
@@ -73,7 +73,7 @@ class PaymentReference implements GroupSequenceProviderInterface, QrCodeableInte
         }
     }
 
-    public function getQrCodeData(): array
+    public function getQrCodeData()
     {
         return [
             $this->getType(),
@@ -81,44 +81,40 @@ class PaymentReference implements GroupSequenceProviderInterface, QrCodeableInte
         ];
     }
 
-    public static function loadValidatorMetadata(ClassMetadata $metadata): void
+    public static function loadValidatorMetadata(ClassMetadata $metadata)
     {
         $metadata->setGroupSequenceProvider(true);
 
-        $metadata->addPropertyConstraints('type', [
-            new Assert\NotBlank([
-                'groups' => ['default']
-            ]),
-            new Assert\Choice([
-                'groups' => ['default'],
-                'choices' => [
-                    self::TYPE_QR,
-                    self::TYPE_SCOR,
-                    self::TYPE_NON
-                ]
-            ])
-        ]);
+        $metadata->addPropertyConstraint('type', new Assert\NotBlank([
+            'groups' => ['default']
+        ]));
+        $metadata->addPropertyConstraint('type', new Assert\Choice([
+            'groups' => ['default'],
+            'choices' => [
+                self::TYPE_QR,
+                self::TYPE_SCOR,
+                self::TYPE_NON
+            ]
+        ]));
 
-        $metadata->addPropertyConstraints('reference', [
-            new Assert\Type([
-                'type' => 'alnum',
-                'groups' => [self::TYPE_QR]
-            ]),
-            new Assert\NotBlank([
-                'groups' => [self::TYPE_QR, self::TYPE_SCOR]
-            ]),
-            new Assert\Length([
-                'min' => 27,
-                'max' => 27,
-                'groups' => [self::TYPE_QR]
-            ]),
-            new Assert\Blank([
-                'groups' => [self::TYPE_NON]
-            ]),
-            new ValidCreditorReference([
-                'groups' => [self::TYPE_SCOR]
-            ])
-        ]);
+        $metadata->addPropertyConstraint('reference', new Assert\Type([
+            'type' => 'alnum',
+            'groups' => [self::TYPE_QR]
+        ]));
+        $metadata->addPropertyConstraint('reference', new Assert\NotBlank([
+            'groups' => [self::TYPE_QR, self::TYPE_SCOR]
+        ]));
+        $metadata->addPropertyConstraint('reference', new Assert\Length([
+            'min' => 27,
+            'max' => 27,
+            'groups' => [self::TYPE_QR]
+        ]));
+        $metadata->addPropertyConstraint('reference', new Assert\Blank([
+            'groups' => [self::TYPE_NON]
+        ]));
+        $metadata->addPropertyConstraint('reference', new ValidCreditorReference([
+            'groups' => [self::TYPE_SCOR]
+        ]));
     }
 
     public function getGroupSequence()

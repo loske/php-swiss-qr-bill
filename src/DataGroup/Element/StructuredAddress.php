@@ -1,4 +1,4 @@
-<?php declare(strict_types=1);
+<?php
 
 namespace Sprain\SwissQrBill\DataGroup\Element;
 
@@ -60,11 +60,11 @@ class StructuredAddress implements AddressInterface, SelfValidatableInterface, Q
     private $country;
 
     public static function createWithoutStreet(
-        string $name,
-        string $postalCode,
-        string $city,
-        string $country
-    ): self {
+        $name,
+        $postalCode,
+        $city,
+        $country
+    ) {
         $structuredAddress = new self();
         $structuredAddress->name = $name;
         $structuredAddress->postalCode = $postalCode;
@@ -75,13 +75,13 @@ class StructuredAddress implements AddressInterface, SelfValidatableInterface, Q
     }
 
     public static function createWithStreet(
-        string $name,
-        string $street,
-        ?string $buildingNumber,
-        string $postalCode,
-        string $city,
-        string $country
-    ): self {
+        $name,
+        $street,
+        $buildingNumber,
+        $postalCode,
+        $city,
+        $country
+    ) {
         $structuredAddress = new self();
         $structuredAddress->name = $name;
         $structuredAddress->street = $street;
@@ -93,37 +93,37 @@ class StructuredAddress implements AddressInterface, SelfValidatableInterface, Q
         return $structuredAddress;
     }
 
-    public function getName(): ?string
+    public function getName()
     {
         return $this->name;
     }
 
-    public function getStreet(): ?string
+    public function getStreet()
     {
         return $this->street;
     }
 
-    public function getBuildingNumber(): ?string
+    public function getBuildingNumber()
     {
         return $this->buildingNumber;
     }
 
-    public function getPostalCode(): ?string
+    public function getPostalCode()
     {
         return $this->postalCode;
     }
 
-    public function getCity(): ?string
+    public function getCity()
     {
         return $this->city;
     }
 
-    public function getCountry(): ?string
+    public function getCountry()
     {
         return $this->country;
     }
 
-    public function getFullAddress(): string
+    public function getFullAddress()
     {
         $address = $this->getName();
 
@@ -144,7 +144,7 @@ class StructuredAddress implements AddressInterface, SelfValidatableInterface, Q
         return $address;
     }
 
-    public function getQrCodeData(): array
+    public function getQrCodeData()
     {
         return [
             $this->getCity() ? self::ADDRESS_TYPE : '',
@@ -157,44 +157,32 @@ class StructuredAddress implements AddressInterface, SelfValidatableInterface, Q
         ];
     }
 
-    public static function loadValidatorMetadata(ClassMetadata $metadata): void
+    public static function loadValidatorMetadata(ClassMetadata $metadata)
     {
-        $metadata->addPropertyConstraints('name', [
-            new Assert\NotBlank(),
-            new Assert\Length([
-                'max' => 70
-            ])
-        ]);
+        $metadata->addPropertyConstraint('name', new Assert\NotBlank());
+        $metadata->addPropertyConstraint('name', new Assert\Length([
+            'max' => 70
+        ]));
 
-        $metadata->addPropertyConstraints('street', [
-            new Assert\Length([
-                'max' => 70
-            ])
-        ]);
+        $metadata->addPropertyConstraint('street', new Assert\Length([
+            'max' => 70
+        ]));
 
-        $metadata->addPropertyConstraints('buildingNumber', [
-            new Assert\Length([
-                'max' => 16
-            ])
-        ]);
+        $metadata->addPropertyConstraint('buildingNumber', new Assert\Length([
+            'max' => 16
+        ]));
 
-        $metadata->addPropertyConstraints('postalCode', [
-            new Assert\NotBlank(),
-            new Assert\Length([
-                'max' => 16
-            ])
-        ]);
+        $metadata->addPropertyConstraint('postalCode', new Assert\NotBlank());
+        $metadata->addPropertyConstraint('postalCode', new Assert\Length([
+            'max' => 16
+        ]));
 
-        $metadata->addPropertyConstraints('city', [
-            new Assert\NotBlank(),
-            new Assert\Length([
-                'max' => 35
-            ])
-        ]);
+        $metadata->addPropertyConstraint('city', new Assert\NotBlank());
+        $metadata->addPropertyConstraint('city', new Assert\Length([
+            'max' => 35
+        ]));
 
-        $metadata->addPropertyConstraints('country', [
-            new Assert\NotBlank(),
-            new Assert\Country()
-        ]);
+        $metadata->addPropertyConstraint('country', new Assert\NotBlank());
+        $metadata->addPropertyConstraint('country', new Assert\Country());
     }
 }

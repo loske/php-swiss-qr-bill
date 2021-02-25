@@ -1,4 +1,4 @@
-<?php declare(strict_types=1);
+<?php
 
 namespace Sprain\SwissQrBill\PaymentPart\Output;
 
@@ -8,15 +8,15 @@ interface OutputInterface
 {
     public function getQrBill(): ?QrBill;
 
-    public function getLanguage(): ?string;
+    public function getLanguage();
 
     public function getPaymentPart();
 
     public function setPrintable(bool $printable);
 
-    public function isPrintable(): bool;
+    public function isPrintable()
 
     public function setQrCodeImageFormat(string $imageFormat);
 
-    public function getQrCodeImageFormat(): string;
+    public function getQrCodeImageFormat();
 }

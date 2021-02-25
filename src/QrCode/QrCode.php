@@ -1,4 +1,4 @@
-<?php declare(strict_types=1);
+<?php
 
 namespace Sprain\SwissQrBill\QrCode;
 
@@ -18,7 +18,7 @@ class QrCode extends BaseQrCode implements QrCodeInterface
         self::FILE_FORMAT_SVG
     ];
 
-    public function writeFile(string $path): void
+    public function writeFile($path)
     {
         $extension = strtolower(pathinfo($path, PATHINFO_EXTENSION));
         $this->setWriterByExtension($extension);
@@ -28,14 +28,14 @@ class QrCode extends BaseQrCode implements QrCodeInterface
         parent::writeFile($path);
     }
 
-    public function writeDataUri(): string
+    public function writeDataUri()
     {
         $this->forceXlinkHrefIfNecessary();
 
         return parent::writeDataUri();
     }
 
-    public function setWriterByExtension(string $extension): void
+    public function setWriterByExtension($extension)
     {
         if (!in_array($extension, self::SUPPORTED_FILE_FORMATS)) {
             throw new UnsupportedFileExtensionException(sprintf(
@@ -48,12 +48,12 @@ class QrCode extends BaseQrCode implements QrCodeInterface
         parent::setWriterByExtension($extension);
     }
 
-    private function forceXlinkHrefIfNecessary(): void
+    private function forceXlinkHrefIfNecessary()
     {
         if ($this->getWriter()->supportsExtension(self::FILE_FORMAT_SVG)) {
-            $this->setWriterOptions([
-                'force_xlink_href' => true
-            ]);
+//            $this->setWriterOptions([
+//                'force_xlink_href' => true
+//            ]);
         }
     }
 }

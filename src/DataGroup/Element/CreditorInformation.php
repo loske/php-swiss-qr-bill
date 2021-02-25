@@ -1,4 +1,4 @@
-<?php declare(strict_types=1);
+<?php
 
 namespace Sprain\SwissQrBill\DataGroup\Element;
 
@@ -19,7 +19,7 @@ class CreditorInformation implements QrCodeableInterface, SelfValidatableInterfa
      */
     private $iban;
 
-    public static function create(string $iban): self
+    public static function create($iban)
     {
         $creditorInformation = new self();
         $creditorInformation->iban = preg_replace('/\s+/', '', $iban);
@@ -27,12 +27,12 @@ class CreditorInformation implements QrCodeableInterface, SelfValidatableInterfa
         return $creditorInformation;
     }
 
-    public function getIban(): ?string
+    public function getIban()
     {
         return $this->iban;
     }
 
-    public function getFormattedIban(): ?string
+    public function getFormattedIban()
     {
         if (null === $this->iban) {
             return null;
@@ -41,7 +41,7 @@ class CreditorInformation implements QrCodeableInterface, SelfValidatableInterfa
         return trim(chunk_split($this->iban, 4, ' '));
     }
 
-    public function containsQrIban(): bool
+    public function containsQrIban()
     {
         $qrIid = substr($this->iban, 4, 5);
 
@@ -52,23 +52,21 @@ class CreditorInformation implements QrCodeableInterface, SelfValidatableInterfa
         return false;
     }
 
-    public function getQrCodeData(): array
+    public function getQrCodeData()
     {
         return [
             $this->getIban()
         ];
     }
 
-    public static function loadValidatorMetadata(ClassMetadata $metadata): void
+    public static function loadValidatorMetadata(ClassMetadata $metadata)
     {
         // Only IBANs with CH or LI country code
-        $metadata->addPropertyConstraints('iban', [
-            new Assert\NotBlank(),
-            new Assert\Iban(),
-            new Assert\Regex([
-                'pattern' => '/^(CH|LI)/',
-                'match' => true
-            ])
-        ]);
+        $metadata->addPropertyConstraint('iban', new Assert\NotBlank());
+        $metadata->addPropertyConstraint('iban', new Assert\Iban());
+        $metadata->addPropertyConstraint('iban', new Assert\Regex([
+            'pattern' => '/^(CH|LI)/',
+            'match' => true
+        ]));
     }
 }

@@ -1,4 +1,4 @@
-<?php declare(strict_types=1);
+<?php
 
 namespace Sprain\SwissQrBill\PaymentPart\Translation;
 
@@ -79,7 +79,7 @@ class Translation
         return self::TRANSLATIONS[$language];
     }
 
-    public static function get(string $key, string $language): ?string
+    public static function get(string $key, string $language)
     {
         $translations = self::getAllByLanguage($language);
         if (! is_array($translations) || ! array_key_exists($key, $translations)) {

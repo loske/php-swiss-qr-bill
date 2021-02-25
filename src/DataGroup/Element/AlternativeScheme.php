@@ -1,4 +1,4 @@
-<?php declare(strict_types=1);
+<?php
 
 namespace Sprain\SwissQrBill\DataGroup\Element;
 
@@ -19,7 +19,7 @@ class AlternativeScheme implements QrCodeableInterface, SelfValidatableInterface
      */
     private $parameter;
 
-    public static function create(string $parameter): self
+    public static function create($parameter)
     {
         $alternativeScheme = new self();
         $alternativeScheme->parameter = $parameter;
@@ -27,12 +27,12 @@ class AlternativeScheme implements QrCodeableInterface, SelfValidatableInterface
         return $alternativeScheme;
     }
 
-    public function getParameter(): ?string
+    public function getParameter()
     {
         return $this->parameter;
     }
 
-    public function getQrCodeData(): array
+    public function getQrCodeData()
     {
         return [
             $this->getParameter()
@@ -43,13 +43,11 @@ class AlternativeScheme implements QrCodeableInterface, SelfValidatableInterface
      * Note that no real-life alternative schemes yet exist. Therefore validation is kept simple yet.
      * @link https://www.paymentstandards.ch/en/home/software-partner/alternative-schemes.html
      */
-    public static function loadValidatorMetadata(ClassMetadata $metadata): void
+    public static function loadValidatorMetadata(ClassMetadata $metadata)
     {
-        $metadata->addPropertyConstraints('parameter', [
-            new Assert\NotBlank(),
-            new Assert\Length([
-                'max' => 100
-            ])
-        ]);
+        $metadata->addPropertyConstraint('parameter', new Assert\NotBlank());
+        $metadata->addPropertyConstraint('parameter', new Assert\Length([
+            'max' => 100
+        ]));
     }
 }

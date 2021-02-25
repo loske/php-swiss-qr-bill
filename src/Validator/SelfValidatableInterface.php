@@ -1,4 +1,4 @@
-<?php declare(strict_types=1);
+<?php
 
 namespace Sprain\SwissQrBill\Validator;
 
@@ -7,9 +7,9 @@ use Symfony\Component\Validator\Mapping\ClassMetadata;
 
 interface SelfValidatableInterface
 {
-    public function getViolations(): ConstraintViolationListInterface;
+    public function getViolations();
 
-    public function isValid(): bool;
+    public function isValid();
 
-    public static function loadValidatorMetadata(ClassMetadata $metadata): void;
+    public static function loadValidatorMetadata(ClassMetadata $metadata);
 }

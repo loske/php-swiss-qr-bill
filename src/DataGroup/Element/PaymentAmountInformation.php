@@ -1,4 +1,4 @@
-<?php declare(strict_types=1);
+<?php
 
 namespace Sprain\SwissQrBill\DataGroup\Element;
 
@@ -29,7 +29,7 @@ class PaymentAmountInformation implements QrCodeableInterface, SelfValidatableIn
      */
     private $currency;
 
-    public static function create(string $currency, ?float $amount = null): self
+    public static function create($currency, $amount = null)
     {
         $paymentInformation = new self();
         $paymentInformation->currency = strtoupper($currency);
@@ -38,12 +38,12 @@ class PaymentAmountInformation implements QrCodeableInterface, SelfValidatableIn
         return $paymentInformation;
     }
 
-    public function getAmount(): ?float
+    public function getAmount()
     {
         return $this->amount;
     }
 
-    public function getFormattedAmount(): ?string
+    public function getFormattedAmount()
     {
         if (null === $this->amount) {
             return '';
@@ -57,12 +57,12 @@ class PaymentAmountInformation implements QrCodeableInterface, SelfValidatableIn
         );
     }
 
-    public function getCurrency(): ?string
+    public function getCurrency()
     {
         return $this->currency;
     }
 
-    public function getQrCodeData(): array
+    public function getQrCodeData()
     {
         if (null !== $this->getAmount()) {
             $amountOutput = number_format($this->getAmount(), 2, '.', '');
@@ -76,20 +76,16 @@ class PaymentAmountInformation implements QrCodeableInterface, SelfValidatableIn
         ];
     }
 
-    public static function loadValidatorMetadata(ClassMetadata $metadata): void
+    public static function loadValidatorMetadata(ClassMetadata $metadata)
     {
-        $metadata->addPropertyConstraints('amount', [
-            new Assert\Range([
-                'min' => 0,
-                'max'=> 999999999.99
-            ]),
-        ]);
+        $metadata->addPropertyConstraint('amount', new Assert\Range([
+            'min' => 0,
+            'max'=> 999999999.99
+        ]));
 
-        $metadata->addPropertyConstraints('currency', [
-            new Assert\Choice([
-                self::CURRENCY_CHF,
-                self::CURRENCY_EUR
-            ])
-        ]);
+        $metadata->addPropertyConstraint('currency', new Assert\Choice([
+            self::CURRENCY_CHF,
+            self::CURRENCY_EUR
+        ]));
     }
 }

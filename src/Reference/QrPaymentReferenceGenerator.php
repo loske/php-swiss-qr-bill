@@ -1,4 +1,4 @@
-<?php declare(strict_types=1);
+<?php
 
 namespace Sprain\SwissQrBill\Reference;
 
@@ -20,14 +20,14 @@ class QrPaymentReferenceGenerator implements SelfValidatableInterface
     /** @var string */
     private $referenceNumber;
 
-    public static function generate(?string $customerIdentificationNumber, string $referenceNumber): string
+    public static function generate($customerIdentificationNumber, $referenceNumber)
     {
         $qrPaymentReferenceGenerator = new self($customerIdentificationNumber, $referenceNumber);
 
         return $qrPaymentReferenceGenerator->doGenerate();
     }
 
-    public function __construct(?string $customerIdentificationNumber, string $referenceNumber)
+    public function __construct($customerIdentificationNumber, $referenceNumber)
     {
         if (null !== $customerIdentificationNumber) {
             $this->customerIdentificationNumber = StringModifier::stripWhitespace($customerIdentificationNumber);
@@ -35,17 +35,17 @@ class QrPaymentReferenceGenerator implements SelfValidatableInterface
         $this->referenceNumber = StringModifier::stripWhitespace($referenceNumber);
     }
 
-    public function getCustomerIdentificationNumber(): ?string
+    public function getCustomerIdentificationNumber()
     {
         return $this->customerIdentificationNumber;
     }
 
-    public function getReferenceNumber(): ?string
+    public function getReferenceNumber()
     {
         return $this->referenceNumber;
     }
 
-    public function doGenerate(): string
+    public function doGenerate()
     {
         if (!$this->isValid()) {
             throw new InvalidQrPaymentReferenceException(
@@ -62,32 +62,28 @@ class QrPaymentReferenceGenerator implements SelfValidatableInterface
         return $completeReferenceNumber;
     }
 
-    public static function loadValidatorMetadata(ClassMetadata $metadata): void
+    public static function loadValidatorMetadata(ClassMetadata $metadata)
     {
-        $metadata->addPropertyConstraints('customerIdentificationNumber', [
-            // Only numbers are allowed (including leading zeros)
-            new Assert\Regex([
-                'pattern' => '/^\d*$/',
-                'match' => true
-            ]),
-            new Assert\Length([
-                'max' => 11
-            ]),
-        ]);
+        $metadata->addPropertyConstraint('customerIdentificationNumber', new Assert\Regex([
+            'pattern' => '/^\d*$/',
+            'match' => true
+        ]));
 
-        $metadata->addPropertyConstraints('referenceNumber', [
-            // Only numbers are allowed (including leading zeros)
-            new Assert\Regex([
+        $metadata->addPropertyConstraint('customerIdentificationNumber', new Assert\Length([
+            'max' => 11
+        ]));
+
+        $metadata->addPropertyConstraint('referenceNumber', new Assert\Regex([
                 'pattern' => '/^\d*$/',
                 'match' => true
-            ]),
-            new Assert\NotBlank()
-        ]);
+            ]));
+
+        $metadata->addPropertyConstraint('referenceNumber', new Assert\NotBlank());
 
         $metadata->addConstraint(new Assert\Callback('validateFullReference'));
     }
 
-    public function validateFullReference(ExecutionContextInterface $context): void
+    public function validateFullReference($context)
     {
         $strlenCustomerIdentificationNumber = $this->customerIdentificationNumber ? strlen($this->customerIdentificationNumber) : 0;
 
@@ -97,7 +93,7 @@ class QrPaymentReferenceGenerator implements SelfValidatableInterface
         }
     }
 
-    private function modulo10(string $number): int
+    private function modulo10($number)
     {
         $table = [0, 9, 4, 6, 8, 2, 7, 1, 3, 5];
         $next = 0;

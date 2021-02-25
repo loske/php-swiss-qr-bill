@@ -1,4 +1,4 @@
-<?php declare(strict_types=1);
+<?php
 
 namespace Sprain\SwissQrBill\PaymentPart\Output\Element;
 
@@ -6,7 +6,7 @@ class Text implements OutputElementInterface
 {
     private $text;
 
-    public static function create(string $text): self
+    public static function create(string $text)
     {
         $element = new self();
         $element->text = $text;
@@ -14,7 +14,7 @@ class Text implements OutputElementInterface
         return $element;
     }
 
-    public function getText(): ?string
+    public function getText()
     {
         return $this->text;
     }
